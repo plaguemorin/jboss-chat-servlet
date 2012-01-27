@@ -79,11 +79,13 @@ function createRoom() {
         return;
     }
 
+    $(".roomBtns").fadeOut();
     $.ajax({
         url: "chatServices/room/" + newRoomId + "/",
         type: "POST",
         success: function() {
             alert("Room has been created");
+            $(".roomBtns").fadeIn();
         }
     });
 }
