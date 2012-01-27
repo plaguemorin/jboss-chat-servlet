@@ -32,6 +32,8 @@ function update() {
                 + "</span> <span class='message'>"
                 + $(data).find("message").text()
                 + "</span></p>");
+
+            $(".message:last-child").scroll();
             setTimeout(update, 100);
         },
 
@@ -92,6 +94,9 @@ function joinRoom() {
         alert("Not supported yet; please refresh the browser");
         return;
     }
+
+    $(".createRoom").fadeOut();
+    $(".joinRoom").fadeOut();
 
     var newRoomId = prompt("Join room:");
     if (newRoomId == "" || newRoomId == undefined) {
