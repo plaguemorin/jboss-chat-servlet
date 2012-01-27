@@ -3,6 +3,7 @@ package com.hybris.chatservice.businesslayer.impl;
 import com.hybris.chatservice.businesslayer.ChatRoomPrivate;
 import com.hybris.chatservice.businesslayer.RoomService;
 import com.hybris.chatservice.commonobjects.ChatRoom;
+import com.hybris.chatservice.commonobjects.InvalidChatRoomException;
 import com.hybris.chatservice.commonobjects.Notification;
 import com.hybris.chatservice.commonobjects.User;
 
@@ -34,7 +35,7 @@ public class DefaultRoomServiceImpl implements RoomService {
 
 	@Override
 	public void postNotification(final Notification notification) {
-		if (notification.getRoomId() != null) {
+		if (notification.getRoomId() != null && this.chatRoomPrivate.containsKey(notification.getRoomId())) {
 			this.chatRoomPrivate.get(notification.getRoomId()).addNotification(notification);
 		}
 	}
@@ -51,8 +52,12 @@ public class DefaultRoomServiceImpl implements RoomService {
 	}
 
 	@Override
-	public void createRoom(final String id) {
+	public void createRoom(final String id) throws InvalidChatRoomException {
 		logger.info("Creating room " + id);
+
+		if (this.chatRoomPrivate.containsKey(id)) {
+			throw new InvalidChatRoomException("Room " + id + " already exists");
+		}
 
 		final ChatRoomPrivate chatRoom = new ChatRoomPrivate();
 		chatRoom.setName(id);
@@ -62,9 +67,13 @@ public class DefaultRoomServiceImpl implements RoomService {
 	}
 
 	@Override
-	public void registerUserToRoom(String roomId, String userId) {
+	public void registerUserToRoom(String roomId, String userId) throws InvalidChatRoomException {
 		logger.info("Registering user " + userId + " to room " + roomId);
-		this.chatRoomPrivate.get(roomId).newUser(userId);
+		if (this.chatRoomPrivate.containsKey(roomId)) {
+			this.chatRoomPrivate.get(roomId).newUser(userId);
+		} else {
+			throw new InvalidChatRoomException("Room " + roomId + " does not exists");
+		}
 	}
 
 	@Override

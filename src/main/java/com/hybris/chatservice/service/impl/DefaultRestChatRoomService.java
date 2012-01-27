@@ -1,10 +1,7 @@
 package com.hybris.chatservice.service.impl;
 
 import com.hybris.chatservice.businesslayer.RoomService;
-import com.hybris.chatservice.commonobjects.ChatRoom;
-import com.hybris.chatservice.commonobjects.NewRoomMessageNotification;
-import com.hybris.chatservice.commonobjects.UserBannedNotification;
-import com.hybris.chatservice.commonobjects.UserKickedNotification;
+import com.hybris.chatservice.commonobjects.*;
 import com.hybris.chatservice.service.ChatRoomMembershipService;
 import com.hybris.chatservice.service.ChatRoomService;
 
@@ -12,6 +9,7 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 import java.util.logging.Logger;
@@ -49,7 +47,11 @@ public class DefaultRestChatRoomService implements ChatRoomService {
 	@Override
 	@POST
 	public void createRoom() {
-		this.roomService.createRoom(roomId);
+		try {
+			this.roomService.createRoom(roomId);
+		} catch (InvalidChatRoomException e) {
+			throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
+		}
 	}
 
 	@Override

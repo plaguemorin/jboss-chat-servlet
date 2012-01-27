@@ -1,6 +1,7 @@
 package com.hybris.chatservice.service.impl;
 
 import com.hybris.chatservice.businesslayer.RoomService;
+import com.hybris.chatservice.commonobjects.InvalidChatRoomException;
 import com.hybris.chatservice.commonobjects.User;
 import com.hybris.chatservice.commonobjects.UserEnterRoomNotification;
 import com.hybris.chatservice.commonobjects.UserLeaveRoomNotification;
@@ -8,6 +9,7 @@ import com.hybris.chatservice.service.ChatRoomMembershipService;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 /**
@@ -32,7 +34,11 @@ public class DefaultRestChatRoomMembershipService implements ChatRoomMembershipS
 	@Override
 	@POST
 	public void subscribe(@QueryParam("userId") final String userId) {
-		this.roomService.registerUserToRoom(roomId, userId);
+		try {
+			this.roomService.registerUserToRoom(roomId, userId);
+		} catch (InvalidChatRoomException e) {
+			throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
+		}
 
 		final UserEnterRoomNotification messageNotification = new UserEnterRoomNotification(roomId, userId);
 		this.roomService.postNotification(messageNotification);

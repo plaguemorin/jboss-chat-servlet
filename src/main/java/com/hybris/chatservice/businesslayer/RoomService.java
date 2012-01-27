@@ -1,6 +1,7 @@
 package com.hybris.chatservice.businesslayer;
 
 import com.hybris.chatservice.commonobjects.ChatRoom;
+import com.hybris.chatservice.commonobjects.InvalidChatRoomException;
 import com.hybris.chatservice.commonobjects.Notification;
 import com.hybris.chatservice.commonobjects.User;
 
@@ -18,9 +19,9 @@ public interface RoomService {
 
 	ChatRoom info(final String roomId);
 
-	void createRoom(final String id);
+	void createRoom(final String id) throws InvalidChatRoomException;
 
-	void registerUserToRoom(String roomId, String userId);
+	void registerUserToRoom(String roomId, String userId) throws InvalidChatRoomException;
 
 	List<User> listUsers(String roomId);
 }

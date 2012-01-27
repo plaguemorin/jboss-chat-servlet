@@ -33,7 +33,8 @@ function update() {
                 + $(data).find("message").text()
                 + "</span></p>");
 
-            $(".message:last-child").scroll();
+            $("body").animate({ scrollTop: $(document).height() }, "slow");
+            $(".messageToSend").focus();
             setTimeout(update, 100);
         },
 
@@ -48,28 +49,28 @@ function update() {
 
 function sendMessage() {
     var message = $(".messageToSend").val();
-    $(".messageToSend").prop('disabled', true);
 
-    $.ajax({
-        url: "chatServices/room/" + roomId,
-        type: "PUT",
-        data: {message: message, userId: userId},
-        success: function() {
-            $(".messageToSend").prop('disabled', false);
-            $(".messageToSend").val("").focus();
-        }
-    });
+    if (message != "") {
+        $(".messageToSend").prop('disabled', true);
+        $.ajax({
+            url: "chatServices/room/" + roomId,
+            type: "PUT",
+            data: {message: message, userId: userId},
+            success: function() {
+                $(".messageToSend").prop('disabled', false);
+                $(".messageToSend").val("").focus();
+            }
+        });
+    }
 
     return false;
 }
 
 function doLogin() {
     $(".login").fadeOut();
-
     userId = $("#login-user").val();
 
-    // Do Login
-    $(".chat").fadeIn();
+    $(".roomBtns").fadeIn();
 }
 
 function createRoom() {
@@ -84,7 +85,6 @@ function createRoom() {
         success: function() {
             alert("Room has been created");
         }
-
     });
 }
 
@@ -95,8 +95,7 @@ function joinRoom() {
         return;
     }
 
-    $(".createRoom").fadeOut();
-    $(".joinRoom").fadeOut();
+    $(".roomBtns").fadeOut();
 
     var newRoomId = prompt("Join room:");
     if (newRoomId == "" || newRoomId == undefined) {
@@ -109,6 +108,10 @@ function joinRoom() {
         type: "POST",
         success: function() {
             startChat(newRoomId);
+        },
+        error: function(data) {
+            $(".roomBtns").fadeIn();
+            alert(data.statusText + "\nAre you sure the room exists");
         }
     });
 }
@@ -119,4 +122,9 @@ $(document).ready(function() {
     $(".sendMessage").click(sendMessage);
     $(".createRoom").click(createRoom);
     $(".joinRoom").click(joinRoom);
+
+    $("#form-login").submit(function() {
+        doLogin();
+        return false;
+    });
 });

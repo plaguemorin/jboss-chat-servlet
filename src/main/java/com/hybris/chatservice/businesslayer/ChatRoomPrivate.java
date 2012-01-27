@@ -35,12 +35,16 @@ public class ChatRoomPrivate extends ChatRoom {
 	}
 
 	public void newUser(String userId) {
+		if (this.perUserData.containsKey(userId)) {
+			return;
+		}
+
 		final ChatRoomPerUserPrivate chatRoomPerUserPrivate = new ChatRoomPerUserPrivate();
 		this.perUserData.put(userId, chatRoomPerUserPrivate);
 
 		User user = new User();
 		user.setName(userId);
-		
+
 		this.getUsers().add(user);
 	}
 }
