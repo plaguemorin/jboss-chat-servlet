@@ -41,7 +41,7 @@ function sendMessage() {
     $(".messageToSend").prop('disabled', true);
 
     $.ajax({
-        url: "chatServices/room/1",
+        url: "chatServices/room/" + roomId,
         type: "PUT",
         data: {message: message},
         success: function() {
