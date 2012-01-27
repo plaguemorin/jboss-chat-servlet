@@ -32,7 +32,14 @@
     font-weight: bold;
     font-style: italic;
     color: #3d773d;
-    
+}
+
+.singleMessage .date {
+    float: right;
+}
+
+.singleMessage:last-of-type {
+    background-color: #e6e6e6;
 }
 
 .btn.danger,

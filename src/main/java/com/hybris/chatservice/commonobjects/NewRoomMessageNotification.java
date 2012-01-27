@@ -4,7 +4,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class NewRoomMessageNotification extends Notification  {
-	private String message;
 
 	public NewRoomMessageNotification() {
 		super();
@@ -12,14 +11,7 @@ public class NewRoomMessageNotification extends Notification  {
 
 	public NewRoomMessageNotification(String roomId, String message) {
 		super(roomId);
-		this.message = message;
+		super.setMessage(message);
 	}
 
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
 }

@@ -24,7 +24,14 @@ function update() {
         type: "GET",
         success: function(data) {
             console.log("new data", data);
-            $(".messages").append("<p class='singleMessage'><span class='userName'>" + $(data).find("userId").text() + "</span> <span class='message'>" + $(data).find("message").text() + "</span></p>");
+            $(".messages").append("<p class='singleMessage'><span class='userName'>"
+                + "<span class='date'>"
+                + (new Date(parseInt($(data).find("date").text()))).toTimeString()
+                + "</span>"
+                + $(data).find("userId").text()
+                + "</span> <span class='message'>"
+                + $(data).find("message").text()
+                + "</span></p>");
             setTimeout(update, 100);
         },
 

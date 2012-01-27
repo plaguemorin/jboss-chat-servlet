@@ -1,6 +1,7 @@
 package com.hybris.chatservice.commonobjects;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Calendar;
 
 /**
  * User: PLMorin
@@ -10,15 +11,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Notification {
 	private String userId;
-
 	private String roomId;
+	private String message;
+	private Long date;
 
 	public Notification(String roomId) {
+		this();
 		this.roomId = roomId;
 	}
 
 	public Notification() {
-
+		this.date = Calendar.getInstance().getTimeInMillis();
 	}
 
 	public String getUserId() {
@@ -35,5 +38,21 @@ public class Notification {
 
 	public void setRoomId(String roomId) {
 		this.roomId = roomId;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public Long getDate() {
+		return date;
+	}
+
+	public void setDate(Long date) {
+		this.date = date;
 	}
 }

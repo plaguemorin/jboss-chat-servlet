@@ -17,5 +17,6 @@ public class UserEnterRoomNotification extends Notification {
 	public UserEnterRoomNotification(String roomId, String userId) {
 		super(roomId);
 		super.setUserId(userId);
+		super.setMessage("User " + userId + " has joined to room " + roomId);
 	}
 }
