@@ -54,5 +54,6 @@ public class LongRunningService {
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
+
 	}
 }

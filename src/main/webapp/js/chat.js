@@ -14,6 +14,7 @@ function startChat(lRoomId) {
     loggedIn = true;
     roomId = lRoomId;
 
+    $(".roomName").text("Room: " + roomId);
     update();
 }
 
@@ -23,7 +24,7 @@ function update() {
         type: "GET",
         success: function(data) {
             console.log("new data", data);
-            $(".messages").append("<p>" + $(data).find("message").text() + "</p>");
+            $(".messages").append("<p class='singleMessage'><span class='userName'>" + $(data).find("userId").text() + "</span> <span class='message'>" + $(data).find("message").text() + "</span></p>");
             setTimeout(update, 100);
         },
 
@@ -43,7 +44,7 @@ function sendMessage() {
     $.ajax({
         url: "chatServices/room/" + roomId,
         type: "PUT",
-        data: {message: message},
+        data: {message: message, userId: userId},
         success: function() {
             $(".messageToSend").prop('disabled', false);
             $(".messageToSend").val("").focus();

@@ -1,7 +1,6 @@
 package com.hybris.chatservice.service;
 
 import com.hybris.chatservice.commonobjects.ChatRoom;
-import com.hybris.chatservice.commonobjects.Notification;
 
 /**
  * User: PLMorin
@@ -50,6 +49,7 @@ public interface ChatRoomService {
 	 * Posts a message to a room
 	 *
 	 * @param message the message that's being posted
+	 * @param userId the user who posts the message
 	 */
-	void postMessage(final String message);
+	void postMessage(String message, final String userId);
 }

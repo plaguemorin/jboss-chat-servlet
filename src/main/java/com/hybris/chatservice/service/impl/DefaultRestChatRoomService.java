@@ -60,9 +60,10 @@ public class DefaultRestChatRoomService implements ChatRoomService {
 
 	@Override
 	@PUT
-	public void postMessage(@FormParam("message") String message) {
+	public void postMessage(@FormParam("message") String message, @FormParam("userId") final String userId) {
 		logger.info("Posting to room " + roomId + " message = " + message);
 		final NewRoomMessageNotification messageNotification = new NewRoomMessageNotification(roomId, message);
+		messageNotification.setUserId(userId);
 
 		this.roomService.postNotification(messageNotification);
 	}
