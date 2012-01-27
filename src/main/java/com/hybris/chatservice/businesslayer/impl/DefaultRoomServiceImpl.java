@@ -7,7 +7,6 @@ import com.hybris.chatservice.commonobjects.Notification;
 import com.hybris.chatservice.commonobjects.User;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateless;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import java.util.LinkedList;

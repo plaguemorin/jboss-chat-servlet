@@ -22,7 +22,7 @@ import javax.ws.rs.ext.Provider;
 public class DefaultRestUserLoginServiceImpl implements UserLoginService {
 	@Inject
 	private UserService userService;
-	
+
 	@Override
 	public String loginNormalUser(String nick) {
 		return this.userService.loginAsUser(nick);

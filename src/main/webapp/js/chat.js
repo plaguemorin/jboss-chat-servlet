@@ -6,12 +6,13 @@
  * To change this template use File | Settings | File Templates.
  */
 var loggedIn = false;
-var userId = "1";
+var userId = "";
 var roomId = "";
 
-function startChat(userId, roomId) {
+function startChat(lRoomId) {
     $(".chat").fadeIn();
     loggedIn = true;
+    roomId = lRoomId;
 
     update();
 }
@@ -55,27 +56,54 @@ function sendMessage() {
 function doLogin() {
     $(".login").fadeOut();
 
-    var createRoomId = "1";
+    userId = $("#login-user").val();
+
+    // Do Login
+    $(".chat").fadeIn();
+}
+
+function createRoom() {
+    var newRoomId = prompt("Room Name");
+    if (newRoomId == "" || newRoomId == undefined) {
+        return;
+    }
+
     $.ajax({
-        url: "chatServices/room/" + createRoomId + "/",
+        url: "chatServices/room/" + newRoomId + "/",
         type: "POST",
         success: function() {
+            alert("Room has been created");
+        }
 
-            $.ajax({
-                url: "chatServices/room/" + createRoomId + "/membership/?userId=" + userId,
-                type: "POST",
-                success: function(data) {
-                    console.log(data);
-                    roomId = createRoomId;
-                    startChat(roomId, userId);
-                }
-            });
+    });
+}
 
+function joinRoom() {
+    if (roomId != "") {
+        // UNREGISTER
+        alert("Not supported yet; please refresh the browser");
+        return;
+    }
+
+    var newRoomId = prompt("Join room:");
+    if (newRoomId == "" || newRoomId == undefined) {
+        roomId = "";
+        return;
+    }
+
+    $.ajax({
+        url: "chatServices/room/" + newRoomId + "/membership/?userId=" + userId,
+        type: "POST",
+        success: function() {
+            startChat(newRoomId);
         }
     });
 }
 
 $(document).ready(function() {
-    $(".sendMessage").click(sendMessage);
     $("#login-login").click(doLogin);
+
+    $(".sendMessage").click(sendMessage);
+    $(".createRoom").click(createRoom);
+    $(".joinRoom").click(joinRoom);
 });

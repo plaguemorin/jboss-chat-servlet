@@ -4,7 +4,7 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 
     <script type="text/javascript" src="js/chat.js"></script>
-    <link href="css/main.css" media="screen" type="text/css">
+    <link href="css/main.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -14,6 +14,7 @@
         <fieldset class="inputs glow-container">
             <div class="inner">
                 <label for="login-user">User</label>
+
                 <div class="input-container"><input type="text" class="text" id="login-user" tabindex="2"
                                                     name="loginUser" value=""></div>
             </div>
@@ -21,7 +22,7 @@
 
         <fieldset class="buttons">
             <div class="spinny"></div>
-            <a id="login-login" class="button button-submit hoverfade"><span class="source">Log in</span><span
+            <a id="login-login" class="btn large hoverfade"><span class="source">Log in</span><span
                     class="hover" style="opacity: 0; "></span></a>
             <button type="submit" style="height: 0; width: 0; border: 0;"></button>
         </fieldset>
@@ -29,6 +30,9 @@
 </div>
 
 <div class="chat" style="display: none">
+    <a class="createRoom btn">Create Room</a>
+    <a class="joinRoom btn">Join Room</a>
+
     <div class="messages"></div>
 
     <form>

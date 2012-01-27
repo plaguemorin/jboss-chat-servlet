@@ -6,11 +6,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by IntelliJ IDEA.
  * User: PLMorin
  * Date: 26/01/12
  * Time: 3:04 PM
- * To change this template use File | Settings | File Templates.
  */
 @ApplicationPath("chatServices")
 public class RestApplication extends Application {
