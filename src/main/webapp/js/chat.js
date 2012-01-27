@@ -7,6 +7,7 @@
  */
 var loggedIn = false;
 var userId = "1";
+var roomId = "";
 
 function startChat(userId, roomId) {
     $(".chat").fadeIn();
@@ -17,7 +18,7 @@ function startChat(userId, roomId) {
 
 function update() {
     $.ajax({
-        url: "AsynchronousServlet",
+        url: "AsynchronousServlet?userId=" + userId + "&roomId=" + roomId,
         type: "GET",
         success: function(data) {
             console.log("new data", data);
@@ -65,7 +66,8 @@ function doLogin() {
                 type: "POST",
                 success: function(data) {
                     console.log(data);
-                    startChat(createRoomId, userId);
+                    roomId = createRoomId;
+                    startChat(roomId, userId);
                 }
             });
 

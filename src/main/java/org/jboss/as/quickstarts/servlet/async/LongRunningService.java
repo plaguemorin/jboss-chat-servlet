@@ -34,14 +34,15 @@ public class LongRunningService {
 	 *
 	 * @param asyncContext the context for a suspended Servlet request that this EJB will
 	 *                     complete later.
-	 * @param s
+	 * @param roomId
+	 * @param userId
 	 */
 	@Asynchronous
-	public void readData(AsyncContext asyncContext, String s) {
+	public void readData(AsyncContext asyncContext, String roomId, String userId) {
 		try {
 			PrintWriter writer = asyncContext.getResponse().getWriter();
 
-			final Notification notification = roomService.pollNextNotification(s, "1");
+			final Notification notification = roomService.pollNextNotification(roomId, userId);
 			final JAXBContext jaxbContext = JAXBContext.newInstance(Notification.class, NewRoomMessageNotification.class);
 			final Marshaller marshaller = jaxbContext.createMarshaller();
 

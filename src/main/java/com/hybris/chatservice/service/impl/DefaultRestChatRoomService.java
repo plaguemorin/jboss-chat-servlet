@@ -82,12 +82,10 @@ public class DefaultRestChatRoomService implements ChatRoomService {
 	}
 
 	@Override
-	@GET
 	@Path("/membership/")
 	public ChatRoomMembershipService membership() {
 		// if this room is private, we should return a sub type of DefaultRestChatRoomMembershipService
 		return this.defaultMembershipService;
-//		return new DefaultRestChatRoomMembershipService();
 	}
 
 }

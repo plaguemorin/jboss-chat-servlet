@@ -40,6 +40,6 @@ public class AsynchronousServlet extends HttpServlet {
        
        // This method will return immediately when invoked, 
        // the actual execution will run in a separate thread.
-       longRunningService.readData(asyncContext, "1");
+       longRunningService.readData(asyncContext, req.getParameter("roomId"), req.getParameter("userId"));
    }
 }
