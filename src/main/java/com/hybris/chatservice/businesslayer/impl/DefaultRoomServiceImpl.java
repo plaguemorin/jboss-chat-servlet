@@ -41,8 +41,13 @@ public class DefaultRoomServiceImpl implements RoomService {
 	}
 
 	@Override
-	public Notification pollNextNotification(final String roomId, final String userId) {
-		logger.info("polling: " + roomId + " " + userId);
+	public Notification pollNextNotification(final String roomId, final String userId) throws InvalidChatRoomException {
+		logger.info("polling: " + roomId + ", user: " + userId);
+
+		if (!this.chatRoomPrivate.containsKey(roomId)) {
+			throw new InvalidChatRoomException("Room " + roomId + " does not exists");
+		}
+
 		return this.chatRoomPrivate.get(roomId).pollNotification(userId);
 	}
 
@@ -69,6 +74,7 @@ public class DefaultRoomServiceImpl implements RoomService {
 	@Override
 	public void registerUserToRoom(String roomId, String userId) throws InvalidChatRoomException {
 		logger.info("Registering user " + userId + " to room " + roomId);
+		
 		if (this.chatRoomPrivate.containsKey(roomId)) {
 			this.chatRoomPrivate.get(roomId).newUser(userId);
 		} else {

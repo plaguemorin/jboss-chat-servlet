@@ -15,7 +15,7 @@ import java.util.List;
 public interface RoomService {
 	void postNotification(final Notification notification);
 
-	Notification pollNextNotification(final String roomId, final String userId);
+	Notification pollNextNotification(final String roomId, final String userId) throws InvalidChatRoomException;
 
 	ChatRoom info(final String roomId);
 
