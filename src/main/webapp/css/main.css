@@ -24,27 +24,6 @@
     border: 1px solid rgba(0, 0, 255, 0.8);
 }
 
-.messages {
-
-}
-
-.singleMessage {
-    border: 1px solid #efefef;
-}
-
-.singleMessage .userName {
-    font-weight: bold;
-    font-style: italic;
-    color: #3d773d;
-}
-
-.singleMessage .date {
-    float: right;
-}
-
-.singleMessage:last-of-type {
-    background-color: #e6e6e6;
-}
 
 .btn.danger,
 .alert-message.danger,
@@ -69,6 +48,8 @@
     font-family: Arial, sans-serif;
     line-height: 18px;
 }
+
+
 
 .btn.danger,
 .alert-message.danger,

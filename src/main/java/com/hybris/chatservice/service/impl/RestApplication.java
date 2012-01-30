@@ -17,6 +17,7 @@ public class RestApplication extends Application {
 		Set<Class<?>> s = new HashSet<Class<?>>();
 		s.add(DefaultRestChatRoomService.class);
 		s.add(DefaultRestUserLoginServiceImpl.class);
+		s.add(DefaultRestUserService.class);
 		return s;
 	}
 }

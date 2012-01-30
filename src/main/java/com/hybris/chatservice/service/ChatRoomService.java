@@ -46,10 +46,8 @@ public interface ChatRoomService {
 
 
 	/**
-	 * Posts a message to a room
 	 *
-	 * @param message the message that's being posted
-	 * @param userId the user who posts the message
+	 * @return the sub-service
 	 */
-	void postMessage(String message, final String userId);
+	ChatRoomMessagesService messages();
 }

@@ -2,7 +2,6 @@ package com.hybris.chatservice.businesslayer;
 
 import com.hybris.chatservice.commonobjects.ChatRoom;
 import com.hybris.chatservice.commonobjects.Notification;
-import com.hybris.chatservice.commonobjects.User;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -42,9 +41,6 @@ public class ChatRoomPrivate extends ChatRoom {
 		final ChatRoomPerUserPrivate chatRoomPerUserPrivate = new ChatRoomPerUserPrivate();
 		this.perUserData.put(userId, chatRoomPerUserPrivate);
 
-		User user = new User();
-		user.setName(userId);
-
-		this.getUsers().add(user);
+		this.getUsers().add(userId);
 	}
 }

@@ -11,7 +11,7 @@ import java.util.List;
 @XmlRootElement
 public class ChatRoom {
 	private String name;
-	private List<User> users;
+	private List<String> users;
 
 	public String getName() {
 		return name;
@@ -21,11 +21,11 @@ public class ChatRoom {
 		this.name = name;
 	}
 
-	public List<User> getUsers() {
+	public List<String> getUsers() {
 		return users;
 	}
 
-	public void setUsers(List<User> users) {
+	public void setUsers(List<String> users) {
 		this.users = users;
 	}
 }

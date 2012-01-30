@@ -7,17 +7,6 @@
    <artifactId>jboss-as-servlet-async</artifactId>
    <version>7.0.2.CR3</version>
    <packaging>war</packaging>
-   <name>JBoss AS Quickstarts: Asynchronous Servlet</name>
-   <description>JBoss AS Quickstarts: Asynchronous Servlet</description>
-
-   <url>http://jboss.org/jbossas</url>
-   <licenses>
-      <license>
-         <name>Apache License, Version 2.0</name>
-         <distribution>repo</distribution>
-         <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-      </license>
-   </licenses>
 
    <properties>
       <!-- Explicitly declaring the source encoding eliminates the following 

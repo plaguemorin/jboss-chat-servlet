@@ -1,16 +1,18 @@
 package com.hybris.chatservice.service.impl;
 
 import com.hybris.chatservice.businesslayer.RoomService;
-import com.hybris.chatservice.commonobjects.*;
+import com.hybris.chatservice.commonobjects.ChatRoom;
+import com.hybris.chatservice.commonobjects.InvalidChatRoomException;
+import com.hybris.chatservice.commonobjects.UserBannedNotification;
+import com.hybris.chatservice.commonobjects.UserKickedNotification;
 import com.hybris.chatservice.service.ChatRoomMembershipService;
+import com.hybris.chatservice.service.ChatRoomMessagesService;
 import com.hybris.chatservice.service.ChatRoomService;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 import java.util.logging.Logger;
 
@@ -26,8 +28,8 @@ import java.util.logging.Logger;
 public class DefaultRestChatRoomService implements ChatRoomService {
 	private Logger logger = Logger.getLogger(DefaultRestChatRoomService.class.getName());
 
-	@Context
-	private SecurityContext securityContext;
+//	@Context
+//	private SecurityContext securityContext;
 
 	@PathParam("id")
 	private String roomId;
@@ -37,6 +39,9 @@ public class DefaultRestChatRoomService implements ChatRoomService {
 
 	@Inject
 	private ChatRoomMembershipService defaultMembershipService;
+
+	@Inject
+	private ChatRoomMessagesService chatRoomMessagesService;
 
 	@Override
 	@GET
@@ -60,15 +65,6 @@ public class DefaultRestChatRoomService implements ChatRoomService {
 
 	}
 
-	@Override
-	@PUT
-	public void postMessage(@FormParam("message") String message, @FormParam("userId") final String userId) {
-		logger.info("Posting to room " + roomId + " message = " + message);
-		final NewRoomMessageNotification messageNotification = new NewRoomMessageNotification(roomId, message);
-		messageNotification.setUserId(userId);
-
-		this.roomService.postNotification(messageNotification);
-	}
 
 	@Override
 	@POST
@@ -92,6 +88,12 @@ public class DefaultRestChatRoomService implements ChatRoomService {
 	public ChatRoomMembershipService membership() {
 		// if this room is private, we should return a sub type of DefaultRestChatRoomMembershipService
 		return this.defaultMembershipService;
+	}
+
+	@Override
+	@Path("/messages/")
+	public ChatRoomMessagesService messages() {
+		return this.chatRoomMessagesService;
 	}
 
 }

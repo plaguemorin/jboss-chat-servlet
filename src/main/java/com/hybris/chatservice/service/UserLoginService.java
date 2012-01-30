@@ -6,7 +6,10 @@ package com.hybris.chatservice.service;
  * Time: 11:50 AM
  */
 public interface UserLoginService {
-	String loginNormalUser(final String nick);
-
-	String loginModerator(final String userName, final String password);
+	/**
+	 *
+	 * @param email the email to join
+	 * @return a unique user-id
+	 */
+	String loginNormalUser(final String email);
 }

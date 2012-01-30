@@ -1,14 +1,18 @@
 package com.hybris.chatservice.businesslayer;
 
+import com.hybris.chatservice.commonobjects.User;
+
 /**
  * User: PLMorin
  * Date: 26/01/12
  * Time: 9:28 PM
  */
 public interface UserService {
-	String loginAsUser(final String nick);
+	String loginAsUser(final String nick) throws InvalidUserException;
 
-	String loginAsModerator(final String userName, final String password);
+	User info(final String userId);
 
-	boolean isUserModerator(final String userId);
+	boolean isValidUser(final String userId);
+
+	void changeNick(String userKey, String newNickname);
 }

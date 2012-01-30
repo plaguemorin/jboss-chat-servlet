@@ -5,7 +5,6 @@ import com.hybris.chatservice.businesslayer.RoomService;
 import com.hybris.chatservice.commonobjects.ChatRoom;
 import com.hybris.chatservice.commonobjects.InvalidChatRoomException;
 import com.hybris.chatservice.commonobjects.Notification;
-import com.hybris.chatservice.commonobjects.User;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
@@ -13,6 +12,7 @@ import javax.inject.Singleton;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
@@ -27,10 +27,16 @@ public class DefaultRoomServiceImpl implements RoomService {
 	private Logger logger = Logger.getLogger(DefaultRoomServiceImpl.class.getName());
 	private Map<String, ChatRoomPrivate> chatRoomPrivate;
 
-
 	@PostConstruct
 	public void init() {
 		this.chatRoomPrivate = new ConcurrentHashMap<String, ChatRoomPrivate>();
+
+		// Test room
+		try {
+			this.createRoom("hybris");
+		} catch (InvalidChatRoomException e) {
+			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+		}
 	}
 
 	@Override
@@ -66,7 +72,7 @@ public class DefaultRoomServiceImpl implements RoomService {
 
 		final ChatRoomPrivate chatRoom = new ChatRoomPrivate();
 		chatRoom.setName(id);
-		chatRoom.setUsers(new LinkedList<User>());
+		chatRoom.setUsers(new LinkedList<String>());
 
 		this.chatRoomPrivate.put(id, chatRoom);
 	}
@@ -83,8 +89,13 @@ public class DefaultRoomServiceImpl implements RoomService {
 	}
 
 	@Override
-	public List<User> listUsers(String roomId) {
+	public List<String> listUsers(String roomId) {
 		return this.chatRoomPrivate.get(roomId).getUsers();
+	}
+
+	@Override
+	public Set<String> listRooms() {
+		return this.chatRoomPrivate.keySet();
 	}
 
 }

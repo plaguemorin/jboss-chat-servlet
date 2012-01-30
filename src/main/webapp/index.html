@@ -4,7 +4,10 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 
     <script type="text/javascript" src="js/chat.js"></script>
+    <script src="js/jScrollPane/jquery.mousewheel.js"></script>
+    <script src="js/jScrollPane/jScrollPane.min.js"></script>
     <link href="css/main.css" rel="stylesheet" type="text/css">
+    <link href="css/chat.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -28,21 +31,24 @@
     </form>
 </div>
 
-<div class="roomBtns" style="display: none">
-    <a class="createRoom btn">Create Room</a>
-    <a class="joinRoom btn">Join Room</a>
+<div id="chatContainer">
+
+    <div id="chatTopBar" class="rounded"></div>
+    <div id="chatLineHolder"></div>
+
+    <div id="chatUsers" class="rounded"></div>
+    <div id="chatBottomBar" class="rounded">
+        <div class="tip"></div>
+
+        <form id="submitForm" method="post" action="">
+            <input id="chatText" name="chatText" class="rounded" maxlength="255"/>
+            <input type="submit" class="blueButton" value="Submit"/>
+        </form>
+
+    </div>
+
 </div>
 
-<div class="chat" style="display: none">
 
-    <h1 class="roomName"></h1>
-
-    <div class="messages"></div>
-
-    <form>
-        <input type="text" class="messageToSend"/>
-        <button class="sendMessage">Send</button>
-    </form>
-</div>
 </body>
 </html>
