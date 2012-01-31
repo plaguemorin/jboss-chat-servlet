@@ -17,4 +17,6 @@ public interface ChatRoomMembershipService {
 	void subscribe(final String userId);
 
 	void unSubscribe(final String userId);
+
+
 }

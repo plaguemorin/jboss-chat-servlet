@@ -185,18 +185,38 @@ var chatUI = {
         }).data("jsp");
 
         $("#submitForm").submit(function() {
-            theRoom.sendMessage($("#chatText").val());
+            var testToSend = $("#chatText").val();
+            if (testToSend != "") {
+                theRoom.sendMessage(testToSend);
+            }
             $("#chatText").val("").focus();
             return false;
         });
 
+        $(".logoutButton").click(function(){
+            chatUserBackend.logout();
+            window.location = window.location;
+        });
+
         this.setTitle(this.data.room.roomId);
 
-        var sourceTemplateMessages = $("#template-message").html();
-        var sourceTemplateUser = $("#template-user").html();
+        $.ajax({
+            url: "templates/chatLine.html",
+            type: "GET",
+            async: false,
+            success: function(data) {
+                chatUI.data.templateMessage = Handlebars.compile(data);
+            }
+        });
 
-        this.data.templateMessage = Handlebars.compile(sourceTemplateMessages);
-        this.data.templateUser = Handlebars.compile(sourceTemplateUser);
+        $.ajax({
+            url:"templates/user.html",
+            type: "GET",
+            async: false,
+            success:function(data) {
+                chatUI.data.templateUser = Handlebars.compile(data);
+            }
+        });
     },
 
     setTitle: function(title) {
@@ -254,6 +274,8 @@ function updateDisplay(data) {
     var userid = $(data).find("userId").text();
 
     if (data.documentElement.tagName == "newRoomMessageNotification") {
+        console.log("Message: ", data);
+
         chatUI.addChatLine(date, message, userid);
     } else {
         console.log(data);
@@ -280,7 +302,7 @@ function doLogin() {
         $("#login").fadeOut();
         $("#chatContainer").fadeIn();
 
-        $(document).unload(function() {
+        $(window).unload(function() {
             chatUserBackend.logout();
         });
     }
@@ -288,5 +310,4 @@ function doLogin() {
 
 $(document).ready(function() {
     $("#login-login").click(doLogin);
-    
 });

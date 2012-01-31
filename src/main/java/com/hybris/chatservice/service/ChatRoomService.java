@@ -10,44 +10,33 @@ import com.hybris.chatservice.commonobjects.ChatRoom;
 
 public interface ChatRoomService {
 
-	ChatRoom info();
+	ChatRoom info(final String roomId);
 
 	/**
 	 * Creates a room, only a moderator can create a room
 	 *
+	 * @param roomId
 	 */
-	void createRoom();
+	void createRoom(final String roomId);
 
 	/**
 	 * Deletes a room
 	 *
+	 * @param roomId
 	 */
-	void deleteRoom();
-
-	/**
-	 * Kicks userId from roomId
-	 *
-	 * @param userId the user to kick
-	 */
-	void kickUser(final String userId);
-
-	/**
-	 * Ban userId from roomId
-	 *
-	 * @param userId the user to kick
-	 */
-	void banUser(final String userId);
+	void deleteRoom(final String roomId);
 
 	/**
 	 * Returns the membership service for this room
+	 * @param roomId
 	 * @return membership service
 	 */
-	ChatRoomMembershipService membership();
-
+	ChatRoomMembershipService membership(final String roomId);
 
 	/**
 	 *
+	 * @param roomId
 	 * @return the sub-service
 	 */
-	ChatRoomMessagesService messages();
+	ChatRoomMessagesService messages(final String roomId);
 }

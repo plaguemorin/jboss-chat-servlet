@@ -23,9 +23,6 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class DefaultRestUserService implements UserService {
 
-	@PathParam("key")
-	private String userKey;
-
 	@Inject
 	private com.hybris.chatservice.businesslayer.UserService userService;
 
@@ -34,7 +31,7 @@ public class DefaultRestUserService implements UserService {
 
 	@Override
 	@GET
-	public User info() {
+	public User info(@PathParam("key") final String userKey) {
 		// TODO: We shouldn't return the email here
 		return this.userService.info(userKey);
 	}
@@ -43,7 +40,7 @@ public class DefaultRestUserService implements UserService {
 	@Override
 	@POST
 	@Path("nickname")
-	public void setNickname(@FormParam("nick") String newNickname) {
+	public void setNickname(@PathParam("key") final String userKey, @FormParam("nick") String newNickname) {
 		try {
 			this.userService.changeNick(userKey, newNickname);
 		} catch (InvalidUserException e) {
@@ -53,7 +50,7 @@ public class DefaultRestUserService implements UserService {
 
 	@Override
 	@DELETE
-	public void logout() {
+	public void logout(@PathParam("key") final String userKey) {
 		if (!this.userService.isValidUser(userKey)) {
 			throw new WebApplicationException(Response.Status.BAD_REQUEST);
 		}

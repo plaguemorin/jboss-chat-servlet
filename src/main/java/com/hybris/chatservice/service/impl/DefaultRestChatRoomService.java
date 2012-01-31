@@ -3,8 +3,6 @@ package com.hybris.chatservice.service.impl;
 import com.hybris.chatservice.businesslayer.RoomService;
 import com.hybris.chatservice.commonobjects.ChatRoom;
 import com.hybris.chatservice.commonobjects.InvalidChatRoomException;
-import com.hybris.chatservice.commonobjects.UserBannedNotification;
-import com.hybris.chatservice.commonobjects.UserKickedNotification;
 import com.hybris.chatservice.service.ChatRoomMembershipService;
 import com.hybris.chatservice.service.ChatRoomMessagesService;
 import com.hybris.chatservice.service.ChatRoomService;
@@ -31,9 +29,6 @@ public class DefaultRestChatRoomService implements ChatRoomService {
 //	@Context
 //	private SecurityContext securityContext;
 
-	@PathParam("id")
-	private String roomId;
-
 	@Inject
 	private RoomService roomService;
 
@@ -45,13 +40,13 @@ public class DefaultRestChatRoomService implements ChatRoomService {
 
 	@Override
 	@GET
-	public ChatRoom info() {
+	public ChatRoom info(@PathParam("id") final String roomId) {
 		return this.roomService.info(roomId);
 	}
 
 	@Override
 	@POST
-	public void createRoom() {
+	public void createRoom(@PathParam("id") final String roomId) {
 		try {
 			this.roomService.createRoom(roomId);
 		} catch (InvalidChatRoomException e) {
@@ -61,38 +56,20 @@ public class DefaultRestChatRoomService implements ChatRoomService {
 
 	@Override
 	@DELETE
-	public void deleteRoom() {
+	public void deleteRoom(@PathParam("id") final String roomId) {
 
-	}
-
-
-	@Override
-	@POST
-	@Path("/kick/")
-	public void kickUser(@QueryParam("kickedUserId") String userId) {
-		final UserKickedNotification messageNotification = new UserKickedNotification();
-		this.roomService.postNotification(messageNotification);
-
-	}
-
-	@Override
-	@POST
-	@Path("/ban/")
-	public void banUser(@QueryParam("bannedUserId") String userId) {
-		final UserBannedNotification messageNotification = new UserBannedNotification();
-		this.roomService.postNotification(messageNotification);
 	}
 
 	@Override
 	@Path("/membership/")
-	public ChatRoomMembershipService membership() {
+	public ChatRoomMembershipService membership(@PathParam("id") final String roomId) {
 		// if this room is private, we should return a sub type of DefaultRestChatRoomMembershipService
 		return this.defaultMembershipService;
 	}
 
 	@Override
 	@Path("/messages/")
-	public ChatRoomMessagesService messages() {
+	public ChatRoomMessagesService messages(@PathParam("id") final String roomId) {
 		return this.chatRoomMessagesService;
 	}
 

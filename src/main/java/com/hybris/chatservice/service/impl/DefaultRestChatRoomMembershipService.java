@@ -2,10 +2,7 @@ package com.hybris.chatservice.service.impl;
 
 import com.hybris.chatservice.businesslayer.RoomService;
 import com.hybris.chatservice.businesslayer.UserService;
-import com.hybris.chatservice.commonobjects.InvalidChatRoomException;
-import com.hybris.chatservice.commonobjects.User;
-import com.hybris.chatservice.commonobjects.UserEnterRoomNotification;
-import com.hybris.chatservice.commonobjects.UserLeaveRoomNotification;
+import com.hybris.chatservice.commonobjects.*;
 import com.hybris.chatservice.service.ChatRoomMembershipService;
 
 import javax.inject.Inject;
@@ -74,4 +71,21 @@ public class DefaultRestChatRoomMembershipService implements ChatRoomMembershipS
 
 		this.roomService.postNotification(new UserLeaveRoomNotification(roomId, userId));
 	}
-}
+
+
+//	@Override
+	@POST
+	@Path("/kick/")
+	public void kickUser(@QueryParam("kickedUserId") String userId) {
+		final UserKickedNotification messageNotification = new UserKickedNotification();
+		this.roomService.postNotification(messageNotification);
+
+	}
+
+//	@Override
+	@POST
+	@Path("/ban/")
+	public void banUser(@QueryParam("bannedUserId") String userId) {
+		final UserBannedNotification messageNotification = new UserBannedNotification();
+		this.roomService.postNotification(messageNotification);
+	}}

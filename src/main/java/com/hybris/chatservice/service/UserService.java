@@ -10,15 +10,17 @@ import com.hybris.chatservice.commonobjects.User;
 public interface UserService {
 
 	/**
+	 * @param userKey
 	 * @return
 	 */
-	User info();
+	User info(final String userKey);
 
 	/**
+	 * @param userKey the user
 	 * @param newNickname new nick name
 	 */
-	void setNickname(final String newNickname);
+	void setNickname(final String userKey, final String newNickname);
 
 
-	void logout();
+	void logout(final String userKey);
 }

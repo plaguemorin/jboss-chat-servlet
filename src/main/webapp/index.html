@@ -10,6 +10,7 @@
 
     <link href="css/main.css" rel="stylesheet" type="text/css">
     <link href="css/chat.css" rel="stylesheet" type="text/css">
+    <link href="css/jScrollPane.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -59,23 +60,6 @@
         </form>
     </div>
 </div>
-
-<div style="display:none" type="text/x-handlebars-template" id="template-message">
-    <div class="chat chat-{{id}} rounded">
-        <span class="gravatar"><img src="{{avatarpath}}" width="23"
-                                    height="23"
-                                    onload="this.style.visibility='visible'" alt=""/>
-        </span>
-        <span class="author">{{author}}</span>
-        <span class="text">{{message}}</span>
-        <span class="time">{{date}}</span>
-    </div>
-</div>
-
-<div style="display:none" type="text/x-handlebars-template" id="template-user">
-    <div data-userkey="{{userKey}}" class="user" title="{{nickname}}"><img src="{{avatarpath}}" width="30" height="30"/></div>
-</div>
-
 
 </body>
 </html>
