@@ -62,6 +62,17 @@ var chatUserBackend = {
         return (userData != null) ? this.userInfo(userData) : false;
     },
 
+    logout: function() {
+        $.ajax({
+            url: "charServices/user/" + this.data.userKey + "/",
+            type: "DELETE",
+            async: false
+        });
+
+        this.data.userKey = "";
+        this.data.ready = false;
+    },
+
     listUsers: function(roomId) {
         var userData = null;
         $.ajax({
@@ -91,7 +102,12 @@ var chatUserBackend = {
     },
 
     changeNickname: function(newNick) {
-
+        $.ajax({
+            url: "chatServices/user/" + this.data.userKey + "/nickname/",
+            type: "POST",
+            data: {nick: newNick},
+            async: false
+        });
         return true;
     },
 
@@ -194,11 +210,14 @@ var chatUI = {
     updateUserList:function() {
         $("#chatUsers").children().remove();
         var users = chatUserBackend.listUsers(this.data.roomId);
+
         $(users).each(function(key, value) {
             var html = chatUI.data.templateUser({
+                userKey: value.id,
                 nickname: value.nickname,
                 avatarpath: value.avatarUrl
             });
+
             $("#chatUsers").append(html);
         });
     },
@@ -238,6 +257,9 @@ function updateDisplay(data) {
         chatUI.addChatLine(date, message, userid);
     } else {
         console.log(data);
+
+        // For now
+        chatUI.updateUserList();
     }
 }
 
@@ -253,12 +275,18 @@ function doLogin() {
         chatUI.init(room);
         chatUI.setTitle("Room: hybris");
         chatUI.setGravatar(selfInfo.avatarUrl);
+        chatUI.updateUserList();
 
         $("#login").fadeOut();
         $("#chatContainer").fadeIn();
+
+        $(document).unload(function() {
+            chatUserBackend.logout();
+        });
     }
 }
 
 $(document).ready(function() {
     $("#login-login").click(doLogin);
+    
 });

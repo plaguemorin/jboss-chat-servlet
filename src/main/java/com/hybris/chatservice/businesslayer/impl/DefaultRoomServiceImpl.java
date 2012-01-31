@@ -98,4 +98,15 @@ public class DefaultRoomServiceImpl implements RoomService {
 		return this.chatRoomPrivate.keySet();
 	}
 
+	@Override
+	public void removeUserFromRoom(String roomId, String userId) throws InvalidChatRoomException {
+		logger.info("Remove " + userId + " from room " + roomId);
+
+		if (this.chatRoomPrivate.containsKey(roomId)) {
+			this.chatRoomPrivate.get(roomId).removeUser(userId);
+		} else {
+			throw new InvalidChatRoomException("Room " + roomId + " does not exists");
+		}
+	}
+
 }

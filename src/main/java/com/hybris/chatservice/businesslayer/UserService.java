@@ -14,5 +14,7 @@ public interface UserService {
 
 	boolean isValidUser(final String userId);
 
-	void changeNick(String userKey, String newNickname);
+	void changeNick(String userKey, String newNickname) throws InvalidUserException;
+
+	void removeUser(String userKey) throws InvalidUserException;
 }

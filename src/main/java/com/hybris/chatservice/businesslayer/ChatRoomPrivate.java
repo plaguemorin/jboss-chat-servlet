@@ -43,4 +43,12 @@ public class ChatRoomPrivate extends ChatRoom {
 
 		this.getUsers().add(userId);
 	}
+
+	public void removeUser(String userId) {
+		if (!this.perUserData.containsKey(userId)) {
+			return;
+		}
+
+		this.getUsers().remove(userId);
+	}
 }

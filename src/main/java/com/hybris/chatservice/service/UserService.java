@@ -18,4 +18,7 @@ public interface UserService {
 	 * @param newNickname new nick name
 	 */
 	void setNickname(final String newNickname);
+
+
+	void logout();
 }

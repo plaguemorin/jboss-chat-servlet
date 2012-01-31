@@ -26,4 +26,6 @@ public interface RoomService {
 	List<String> listUsers(String roomId);
 
 	Set<String> listRooms();
+
+	void removeUserFromRoom(String roomId, String userId) throws InvalidChatRoomException;
 }

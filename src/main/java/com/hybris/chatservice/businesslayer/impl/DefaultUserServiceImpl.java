@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
 /**
  * User: PLMorin
@@ -24,6 +25,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Singleton
 @Named
 public class DefaultUserServiceImpl implements UserService {
+	private Logger logger = Logger.getLogger(DefaultUserServiceImpl.class.getName());
+
 	private Map<String, UserPrivate> userMaps;
 
 	@PostConstruct
@@ -84,9 +87,24 @@ public class DefaultUserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void changeNick(String userKey, String newNickname) {
+	public void changeNick(String userKey, String newNickname) throws InvalidUserException {
 		if (this.isValidUser(userKey)) {
+			logger.info("User " + userKey + " has changed nick to " + newNickname);
 			this.userMaps.get(userKey).setNickname(newNickname);
+		} else {
+			throw new InvalidUserException("User " + userKey + " does not exist");
 		}
+	}
+
+	@Override
+	public void removeUser(String userKey) throws InvalidUserException {
+		if (this.isValidUser(userKey)) {
+			logger.info("User " + userKey + " wants out !");
+
+			this.userMaps.remove(userKey);
+		} else {
+			throw new InvalidUserException("User " + userKey + " does not exist");
+		}
+
 	}
 }
