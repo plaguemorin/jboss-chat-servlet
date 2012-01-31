@@ -1,8 +1,8 @@
 package org.jboss.as.quickstarts.servlet.async;
 
-import com.hybris.chatservice.businesslayer.RoomService;
-import com.hybris.chatservice.commonobjects.NewRoomMessageNotification;
-import com.hybris.chatservice.commonobjects.Notification;
+import ca.screenshot.chatservice.businesslayer.RoomService;
+import ca.screenshot.chatservice.commonobjects.NewRoomMessageNotification;
+import ca.screenshot.chatservice.commonobjects.Notification;
 
 import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
