@@ -6,19 +6,26 @@
     <script type="text/javascript" src="js/chat.js"></script>
     <script src="js/jScrollPane/jquery.mousewheel.js"></script>
     <script src="js/jScrollPane/jScrollPane.min.js"></script>
+    <script src="js/handlebars.js"></script>
+
     <link href="css/main.css" rel="stylesheet" type="text/css">
     <link href="css/chat.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
 
-<div class="login">
+<div id="login">
     <form id="form-login" action method="post">
         <fieldset class="inputs glow-container">
             <div class="inner">
-                <label for="login-user">User</label>
+                <label for="login-user">Email Address</label>
 
                 <div class="input-container"><input type="text" class="text" id="login-user" tabindex="2"
+                                                    name="loginUser" value=""></div>
+
+                <label for="login-nick">Nickname</label>
+
+                <div class="input-container"><input type="text" class="text" id="login-nick" tabindex="2"
                                                     name="loginUser" value=""></div>
             </div>
         </fieldset>
@@ -31,9 +38,15 @@
     </form>
 </div>
 
-<div id="chatContainer">
+<div id="chatContainer" style="display: none">
 
-    <div id="chatTopBar" class="rounded"></div>
+    <div id="chatTopBar" class="rounded">
+        <span>
+            <img id="mygravatar" width="23" height="23"/>
+            <span class="name"></span>
+            <a href="#" class="logoutButton rounded">Logout</a>
+        </span>
+    </div>
     <div id="chatLineHolder"></div>
 
     <div id="chatUsers" class="rounded"></div>
@@ -44,9 +57,23 @@
             <input id="chatText" name="chatText" class="rounded" maxlength="255"/>
             <input type="submit" class="blueButton" value="Submit"/>
         </form>
-
     </div>
+</div>
 
+<div style="display:none" type="text/x-handlebars-template" id="template-message">
+    <div class="chat chat-{{id}} rounded">
+        <span class="gravatar"><img src="{{avatarpath}}" width="23"
+                                    height="23"
+                                    onload="this.style.visibility='visible'" alt=""/>
+        </span>
+        <span class="author">{{author}}</span>
+        <span class="text">{{message}}</span>
+        <span class="time">{{date}}</span>
+    </div>
+</div>
+
+<div style="display:none" type="text/x-handlebars-template" id="template-user">
+    <div class="user" title="{{nickname}}"><img src="{{avatarpath}}" width="30" height="30"/></div>
 </div>
 
 

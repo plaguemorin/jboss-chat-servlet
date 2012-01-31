@@ -7,7 +7,8 @@
 var chatUserBackend = {
     data: {
         userKey: 0,
-        ready: false
+        ready: false,
+        rooms: []
     },
 
     init: function() {
@@ -58,7 +59,21 @@ var chatUserBackend = {
         this.data.ready = true;
         this.changeNickname(nickname);
 
-        return (userData != null);
+        return (userData != null) ? this.userInfo(userData) : false;
+    },
+
+    listUsers: function(roomId) {
+        var userData = null;
+        $.ajax({
+            url: "chatServices/room/" + roomId + "/membership/",
+            type: "GET",
+            async: false,
+            success: function(data, ts, jxhr) {
+                userData = data;
+            }
+        });
+
+        return userData;
     },
 
     userInfo: function(userKey) {
@@ -76,6 +91,7 @@ var chatUserBackend = {
     },
 
     changeNickname: function(newNick) {
+
         return true;
     },
 
@@ -98,160 +114,151 @@ var chatUserBackend = {
             }
         });
 
-
         if (ret) {
             ret = {
                 roomId: roomId,
-                onNewMessageCallback: onNewMessageCallback,
+                onMessageCallback: onNewMessageCallback,
 
-                postMessage: function(message) {
-                    return chatUserBackend.sendMessage(this.roomId, message);
+                sendMessage: function(message) {
+                    chatUserBackend.sendMessage(roomId, message);
+                },
+
+                listUsers: function() {
+                    return chatUserBackend.listUsers(roomId);
+                },
+
+                error: function() {
+
                 },
 
                 update: function() {
-                    console.log("Update on room " + this.roomId);
-
                     $.ajax({
-                        url: "AsynchronousServlet?userId=" + chatUserBackend.data.userKey + "&roomId=" + this.roomId,
+                        url: "AsynchronousServlet?userId=" + chatUserBackend.data.userKey + "&roomId=" + roomId,
                         type: "GET",
-                        success: function(data, status, xhr) {
-                            this.onNewMessageCallback(data);
+                        success: ret.onMessageCallback,
+                        error: ret.error,
+                        complete: function() {
                             setTimeout(ret.update, 100);
-                        },
-                        error: console.log
+                        }
                     });
                 }
-            }
+            };
+
+            ret.update();
         }
 
         return ret;
     }
-
 };
 
+var chatUI = {
+    data: {
+        room: null,
+        templateMessage: null,
+        templateUser: null,
+        jsAPI: null,
+        lastId: 0
+    },
 
-var loggedIn = false;
-var userId = "";
-var roomId = "";
+    init: function(theRoom) {
+        this.data.room = theRoom;
 
-function startChat(lRoomId) {
-    $("#chatContainer").fadeIn();
-    loggedIn = true;
-    roomId = lRoomId;
+        this.data.jsAPI = $("#chatLineHolder").jScrollPane({
+            verticalDragMinHeight: 12,
+            verticalDragMaxHeight: 12
+        }).data("jsp");
 
-    $(".roomName").text("Room: " + roomId);
-    update();
-}
-
-function update() {
-    $.ajax({
-        url: "AsynchronousServlet?userId=" + userId + "&roomId=" + roomId,
-        type: "GET",
-        success: function(data) {
-            console.log("new data", data);
-            $(".messages").append("<p class='singleMessage'><span class='userName'>"
-                + "<span class='date'>"
-                + (new Date(parseInt($(data).find("date").text()))).toTimeString()
-                + "</span>"
-                + $(data).find("userId").text()
-                + "</span> <span class='message'>"
-                + $(data).find("message").text()
-                + "</span></p>");
-
-            $("body").animate({ scrollTop: $(document).height() }, "slow");
-            $(".messageToSend").focus();
-            setTimeout(update, 100);
-        },
-
-        error: function() {
-            loggedIn = false;
-            $(".chat").fadeOut();
-            $(".login").fadeIn();
-        }
-
-    });
-}
-
-function sendMessage() {
-    var message = $(".messageToSend").val();
-
-    if (message != "") {
-        $(".messageToSend").prop('disabled', true);
-        $.ajax({
-            url: "chatServices/room/" + roomId,
-            type: "PUT",
-            data: {message: message, userId: userId},
-            success: function() {
-                $(".messageToSend").prop('disabled', false);
-                $(".messageToSend").val("").focus();
-            }
+        $("#submitForm").submit(function() {
+            theRoom.sendMessage($("#chatText").val());
+            $("#chatText").val("").focus();
+            return false;
         });
-    }
 
-    return false;
+        this.setTitle(this.data.room.roomId);
+
+        var sourceTemplateMessages = $("#template-message").html();
+        var sourceTemplateUser = $("#template-user").html();
+
+        this.data.templateMessage = Handlebars.compile(sourceTemplateMessages);
+        this.data.templateUser = Handlebars.compile(sourceTemplateUser);
+    },
+
+    setTitle: function(title) {
+        $("#chatTopBar span.name").text(title);
+    },
+
+    setGravatar: function(url) {
+        $("#chatTopBar img").attr("src", url);
+    },
+
+    updateUserList:function() {
+        $("#chatUsers").children().remove();
+        var users = chatUserBackend.listUsers(this.data.roomId);
+        $(users).each(function(key, value) {
+            var html = chatUI.data.templateUser({
+                nickname: value.nickname,
+                avatarpath: value.avatarUrl
+            });
+            $("#chatUsers").append(html);
+        });
+    },
+
+    addChatLine: function(date, message, userId) {
+        var jsAPI = this.data.jsAPI;
+        var dateObj = new Date(parseInt(date));
+        var userObj = chatUserBackend.userInfo(userId);
+
+        var html = this.data.templateMessage({
+            message: message,
+            date: dateObj.getHours() + ":" + dateObj.getMinutes(),
+            author: userObj.nickname,
+            avatarpath: userObj.avatarUrl,
+            id: this.data.lastId++
+        });
+
+        jsAPI.getContentPane().append(html);
+        jsAPI.reinitialise();
+        jsAPI.scrollToBottom(true);
+    },
+
+    addSystemLine: function(systemMessage) {
+
+    }
+};
+
+var room = null;
+
+function updateDisplay(data) {
+    var date = $(data).find("date").text();
+    var message = $(data).find("message").text();
+    var roomid = $(data).find("roomId").text();
+    var userid = $(data).find("userId").text();
+
+    if (data.documentElement.tagName == "newRoomMessageNotification") {
+        chatUI.addChatLine(date, message, userid);
+    } else {
+        console.log(data);
+    }
 }
 
 function doLogin() {
-    $(".login").fadeOut();
-    userId = $("#login-user").val();
+    var email = $("#login-user").val();
+    var nick = $("#login-nick").val();
 
-    $(".roomBtns").fadeIn();
-}
+    var selfInfo = chatUserBackend.registerUser(email, nick);
 
-function createRoom() {
-    var newRoomId = prompt("Room Name");
-    if (newRoomId == "" || newRoomId == undefined) {
-        return;
+    if (selfInfo !== false) {
+        room = chatUserBackend.joinRoom("hybris", updateDisplay);
+
+        chatUI.init(room);
+        chatUI.setTitle("Room: hybris");
+        chatUI.setGravatar(selfInfo.avatarUrl);
+
+        $("#login").fadeOut();
+        $("#chatContainer").fadeIn();
     }
-
-    $(".roomBtns").fadeOut();
-    $.ajax({
-        url: "chatServices/room/" + newRoomId + "/",
-        type: "POST",
-        success: function() {
-            alert("Room has been created");
-            $(".roomBtns").fadeIn();
-        }
-    });
-}
-
-function joinRoom() {
-    if (roomId != "") {
-        // UNREGISTER
-        alert("Not supported yet; please refresh the browser");
-        return;
-    }
-
-    $(".roomBtns").fadeOut();
-
-    var newRoomId = prompt("Join room:");
-    if (newRoomId == "" || newRoomId == undefined) {
-        roomId = "";
-        return;
-    }
-
-    $.ajax({
-        url: "chatServices/room/" + newRoomId + "/membership/?userId=" + userId,
-        type: "POST",
-        success: function() {
-            startChat(newRoomId);
-        },
-        error: function(data) {
-            $(".roomBtns").fadeIn();
-            alert(data.statusText + "\nAre you sure the room exists");
-        }
-    });
 }
 
 $(document).ready(function() {
     $("#login-login").click(doLogin);
-
-    $("#submitForm input[type='submit']").click(sendMessage);
-    $(".createRoom").click(createRoom);
-    $(".joinRoom").click(joinRoom);
-
-    $("#form-login").submit(function() {
-        doLogin();
-        return false;
-    });
 });

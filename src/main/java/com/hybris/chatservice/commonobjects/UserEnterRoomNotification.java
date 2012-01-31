@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Date: 26/01/12
  * Time: 11:42 AM
  */
-@XmlRootElement
+@XmlRootElement(name = "userenterroomnotification")
 public class UserEnterRoomNotification extends Notification {
 
 	public UserEnterRoomNotification() {
@@ -17,6 +17,5 @@ public class UserEnterRoomNotification extends Notification {
 	public UserEnterRoomNotification(String roomId, String userId) {
 		super(roomId);
 		super.setUserId(userId);
-		super.setMessage("User " + userId + " has joined to room " + roomId);
 	}
 }

@@ -13,6 +13,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -30,7 +31,7 @@ public class DefaultUserServiceImpl implements UserService {
 		this.userMaps = new ConcurrentHashMap<String, UserPrivate>();
 	}
 
-	private String makeKeyForUser(final String email) {
+	private String makeMd5OfEmail(final String email) {
 		try {
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			md.update(email.trim().toLowerCase().getBytes());
@@ -52,18 +53,20 @@ public class DefaultUserServiceImpl implements UserService {
 
 	@Override
 	public String loginAsUser(String email) throws InvalidUserException {
-		final String userKey = this.makeKeyForUser(email);
-
-		if (this.userMaps.containsKey(userKey)) {
-			throw new InvalidUserException("User " + email + " is already logged in");
+		for (final User user : this.userMaps.values()) {
+			if (user.getEmail().equalsIgnoreCase(email)) {
+				throw new InvalidUserException("User " + email + " is already logged in");
+			}
 		}
+
+		final String userKey = UUID.randomUUID().toString();
 
 		final UserPrivate userPrivate = new UserPrivate();
 		userPrivate.setId(userKey);
 		userPrivate.setEmail(email);
 		userPrivate.setRegisterDate(Calendar.getInstance().getTimeInMillis());
 		userPrivate.setLastActive(userPrivate.getRegisterDate());
-		userPrivate.setAvatarUrl("http://www.gravatar.com/avatar/" + userKey);
+		userPrivate.setAvatarUrl("http://www.gravatar.com/avatar/" + this.makeMd5OfEmail(email));
 
 		this.userMaps.put(userKey, userPrivate);
 

@@ -5,9 +5,8 @@ import com.hybris.chatservice.commonobjects.NewRoomMessageNotification;
 import com.hybris.chatservice.service.ChatRoomMessagesService;
 
 import javax.inject.Inject;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.PUT;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import java.util.logging.Logger;
 
 /**
@@ -15,6 +14,8 @@ import java.util.logging.Logger;
  * Date: 30/01/12
  * Time: 1:42 PM
  */
+@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
+@Produces({MediaType.APPLICATION_JSON})
 public class DefaultRestChatRoomMessagesService implements ChatRoomMessagesService {
 	private Logger logger = Logger.getLogger(DefaultRestChatRoomMessagesService.class.getName());
 
