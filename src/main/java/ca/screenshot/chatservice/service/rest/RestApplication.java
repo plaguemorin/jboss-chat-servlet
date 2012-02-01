@@ -1,4 +1,4 @@
-package ca.screenshot.chatservice.service.impl;
+package ca.screenshot.chatservice.service.rest;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;

@@ -1,10 +1,10 @@
-package ca.screenshot.chatservice.service.impl;
+package ca.screenshot.chatservice.service.rest;
 
 import ca.screenshot.chatservice.businesslayer.InvalidUserException;
 import ca.screenshot.chatservice.businesslayer.RoomService;
+import ca.screenshot.chatservice.businesslayer.UserService;
 import ca.screenshot.chatservice.commonobjects.InvalidChatRoomException;
 import ca.screenshot.chatservice.commonobjects.User;
-import ca.screenshot.chatservice.service.UserService;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -21,15 +21,14 @@ import javax.ws.rs.ext.Provider;
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
 @Produces({MediaType.APPLICATION_JSON})
 @Provider
-public class DefaultRestUserService implements UserService {
+public class DefaultRestUserService {
 
 	@Inject
-	private ca.screenshot.chatservice.businesslayer.UserService userService;
+	private UserService userService;
 
 	@Inject
 	private RoomService roomService;
 
-	@Override
 	@GET
 	public User info(@PathParam("key") final String userKey) {
 		// TODO: We shouldn't return the email here
@@ -37,7 +36,6 @@ public class DefaultRestUserService implements UserService {
 	}
 
 
-	@Override
 	@POST
 	@Path("nickname")
 	public void setNickname(@PathParam("key") final String userKey, @FormParam("nick") String newNickname) {
@@ -48,7 +46,6 @@ public class DefaultRestUserService implements UserService {
 		}
 	}
 
-	@Override
 	@DELETE
 	public void logout(@PathParam("key") final String userKey) {
 		if (!this.userService.isValidUser(userKey)) {

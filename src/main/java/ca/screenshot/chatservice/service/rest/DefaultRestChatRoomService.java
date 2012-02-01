@@ -1,16 +1,15 @@
-package ca.screenshot.chatservice.service.impl;
+package ca.screenshot.chatservice.service.rest;
 
 import ca.screenshot.chatservice.businesslayer.RoomService;
 import ca.screenshot.chatservice.commonobjects.ChatRoom;
 import ca.screenshot.chatservice.commonobjects.InvalidChatRoomException;
-import ca.screenshot.chatservice.service.ChatRoomMembershipService;
-import ca.screenshot.chatservice.service.ChatRoomMessagesService;
-import ca.screenshot.chatservice.service.ChatRoomService;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 import java.util.logging.Logger;
 
@@ -23,28 +22,26 @@ import java.util.logging.Logger;
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
 @Produces({MediaType.APPLICATION_JSON})
 @Provider
-public class DefaultRestChatRoomService implements ChatRoomService {
+public class DefaultRestChatRoomService {
 	private Logger logger = Logger.getLogger(DefaultRestChatRoomService.class.getName());
 
-//	@Context
-//	private SecurityContext securityContext;
+	@Context
+	private SecurityContext securityContext;
 
 	@Inject
 	private RoomService roomService;
 
 	@Inject
-	private ChatRoomMembershipService defaultMembershipService;
+	private DefaultRestChatRoomMembershipService defaultMembershipService;
 
 	@Inject
-	private ChatRoomMessagesService chatRoomMessagesService;
+	private DefaultRestChatRoomMessagesService chatRoomMessagesService;
 
-	@Override
 	@GET
 	public ChatRoom info(@PathParam("id") final String roomId) {
 		return this.roomService.info(roomId);
 	}
 
-	@Override
 	@POST
 	public void createRoom(@PathParam("id") final String roomId) {
 		try {
@@ -54,22 +51,19 @@ public class DefaultRestChatRoomService implements ChatRoomService {
 		}
 	}
 
-	@Override
 	@DELETE
 	public void deleteRoom(@PathParam("id") final String roomId) {
 
 	}
 
-	@Override
 	@Path("/membership/")
-	public ChatRoomMembershipService membership(@PathParam("id") final String roomId) {
+	public DefaultRestChatRoomMembershipService membership(@PathParam("id") final String roomId) {
 		// if this room is private, we should return a sub type of DefaultRestChatRoomMembershipService
 		return this.defaultMembershipService;
 	}
 
-	@Override
 	@Path("/messages/")
-	public ChatRoomMessagesService messages(@PathParam("id") final String roomId) {
+	public DefaultRestChatRoomMessagesService messages(@PathParam("id") final String roomId) {
 		return this.chatRoomMessagesService;
 	}
 

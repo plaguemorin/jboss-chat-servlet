@@ -1,9 +1,8 @@
-package ca.screenshot.chatservice.service.impl;
+package ca.screenshot.chatservice.service.rest;
 
 import ca.screenshot.chatservice.businesslayer.RoomService;
 import ca.screenshot.chatservice.businesslayer.UserService;
 import ca.screenshot.chatservice.commonobjects.*;
-import ca.screenshot.chatservice.service.ChatRoomMembershipService;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -19,7 +18,7 @@ import java.util.List;
  */
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
 @Produces({MediaType.APPLICATION_JSON})
-public class DefaultRestChatRoomMembershipService implements ChatRoomMembershipService {
+public class DefaultRestChatRoomMembershipService {
 	@PathParam("id")
 	private String roomId;
 
@@ -29,7 +28,6 @@ public class DefaultRestChatRoomMembershipService implements ChatRoomMembershipS
 	@Inject
 	private UserService userService;
 
-	@Override
 	@GET
 	public List<User> list() {
 		final List<String> userIdList = this.roomService.listUsers(roomId);
@@ -42,7 +40,6 @@ public class DefaultRestChatRoomMembershipService implements ChatRoomMembershipS
 		return userList;
 	}
 
-	@Override
 	@POST
 	public void subscribe(@QueryParam("userId") final String userId) {
 
@@ -61,7 +58,6 @@ public class DefaultRestChatRoomMembershipService implements ChatRoomMembershipS
 		this.roomService.postNotification(messageNotification);
 	}
 
-	@Override
 	@DELETE
 	public void unSubscribe(@QueryParam("userId") final String userId) {
 
@@ -73,7 +69,6 @@ public class DefaultRestChatRoomMembershipService implements ChatRoomMembershipS
 	}
 
 
-//	@Override
 	@POST
 	@Path("/kick/")
 	public void kickUser(@QueryParam("kickedUserId") String userId) {
@@ -82,7 +77,6 @@ public class DefaultRestChatRoomMembershipService implements ChatRoomMembershipS
 
 	}
 
-//	@Override
 	@POST
 	@Path("/ban/")
 	public void banUser(@QueryParam("bannedUserId") String userId) {

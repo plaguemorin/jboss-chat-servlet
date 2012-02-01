@@ -1,8 +1,7 @@
-package ca.screenshot.chatservice.service.impl;
+package ca.screenshot.chatservice.service.rest;
 
 import ca.screenshot.chatservice.businesslayer.InvalidUserException;
 import ca.screenshot.chatservice.businesslayer.UserService;
-import ca.screenshot.chatservice.service.UserLoginService;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -19,11 +18,10 @@ import javax.ws.rs.ext.Provider;
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
 @Produces({MediaType.APPLICATION_JSON})
 @Provider
-public class DefaultRestUserLoginServiceImpl implements UserLoginService {
+public class DefaultRestUserLoginServiceImpl {
 	@Inject
 	private UserService userService;
 
-	@Override
 	@PUT
 	public String loginNormalUser(@QueryParam("userEmail") String email) {
 		try {
