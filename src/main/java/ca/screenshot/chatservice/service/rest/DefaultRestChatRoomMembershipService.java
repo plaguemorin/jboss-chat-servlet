@@ -42,7 +42,6 @@ public class DefaultRestChatRoomMembershipService {
 
 	@POST
 	public void subscribe(@QueryParam("userId") final String userId) {
-
 		if (!this.userService.isValidUser(userId)) {
 			throw new WebApplicationException(Response.Status.BAD_REQUEST);
 		}
@@ -60,7 +59,6 @@ public class DefaultRestChatRoomMembershipService {
 
 	@DELETE
 	public void unSubscribe(@QueryParam("userId") final String userId) {
-
 		if (!this.userService.isValidUser(userId)) {
 			throw new WebApplicationException(Response.Status.BAD_REQUEST);
 		}
@@ -82,4 +80,5 @@ public class DefaultRestChatRoomMembershipService {
 	public void banUser(@QueryParam("bannedUserId") String userId) {
 		final UserBannedNotification messageNotification = new UserBannedNotification();
 		this.roomService.postNotification(messageNotification);
-	}}
+	}
+}
