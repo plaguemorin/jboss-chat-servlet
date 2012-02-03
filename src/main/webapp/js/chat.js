@@ -64,8 +64,9 @@ var chatUserBackend = {
 
     logout: function() {
         $.ajax({
-            url: "charServices/user/" + this.data.userKey + "/",
-            type: "DELETE",
+            url: "chatServices/user/" + this.data.userKey + "/logout/",
+            type: "POST",
+            data: {},
             async: false
         });
 

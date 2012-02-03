@@ -1,12 +1,14 @@
 package ca.screenshot.chatservice.businesslayer.impl;
 
 import ca.screenshot.chatservice.businesslayer.ChatRoomPrivate;
+import ca.screenshot.chatservice.businesslayer.CleanUserEvent;
 import ca.screenshot.chatservice.businesslayer.RoomService;
 import ca.screenshot.chatservice.commonobjects.ChatRoom;
 import ca.screenshot.chatservice.commonobjects.InvalidChatRoomException;
 import ca.screenshot.chatservice.commonobjects.Notification;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.event.Observes;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import java.util.LinkedList;
@@ -80,7 +82,7 @@ public class DefaultRoomServiceImpl implements RoomService {
 	@Override
 	public void registerUserToRoom(String roomId, String userId) throws InvalidChatRoomException {
 		logger.info("Registering user " + userId + " to room " + roomId);
-		
+
 		if (this.chatRoomPrivate.containsKey(roomId)) {
 			this.chatRoomPrivate.get(roomId).newUser(userId);
 		} else {
@@ -109,4 +111,8 @@ public class DefaultRoomServiceImpl implements RoomService {
 		}
 	}
 
+	private void housecleaning(@Observes final CleanUserEvent cleanUserEvent) {
+		logger.info("Performing clean of timed-out users");
+
+	}
 }

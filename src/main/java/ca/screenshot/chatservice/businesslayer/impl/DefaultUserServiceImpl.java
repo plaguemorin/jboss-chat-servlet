@@ -1,12 +1,14 @@
 package ca.screenshot.chatservice.businesslayer.impl;
 
 
+import ca.screenshot.chatservice.businesslayer.CleanUserEvent;
 import ca.screenshot.chatservice.businesslayer.InvalidUserException;
 import ca.screenshot.chatservice.businesslayer.UserPrivate;
 import ca.screenshot.chatservice.businesslayer.UserService;
 import ca.screenshot.chatservice.commonobjects.User;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.event.Observes;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import java.security.MessageDigest;
@@ -105,6 +107,9 @@ public class DefaultUserServiceImpl implements UserService {
 		} else {
 			throw new InvalidUserException("User " + userKey + " does not exist");
 		}
+	}
 
+	private void housecleaning(@Observes final CleanUserEvent cleanUserEvent) {
+		logger.info("Performing clean of timed-out users");
 	}
 }

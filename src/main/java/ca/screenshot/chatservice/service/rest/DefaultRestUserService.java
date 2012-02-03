@@ -5,12 +5,14 @@ import ca.screenshot.chatservice.businesslayer.RoomService;
 import ca.screenshot.chatservice.businesslayer.UserService;
 import ca.screenshot.chatservice.commonobjects.InvalidChatRoomException;
 import ca.screenshot.chatservice.commonobjects.User;
+import org.apache.commons.beanutils.BeanUtils;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * User: PLMorin
@@ -31,8 +33,18 @@ public class DefaultRestUserService {
 
 	@GET
 	public User info(@PathParam("key") final String userKey) {
-		// TODO: We shouldn't return the email here
-		return this.userService.info(userKey);
+		final User retUser = new User();
+
+		try {
+			BeanUtils.copyProperties(retUser, this.userService.info(userKey));
+		} catch (IllegalAccessException e) {
+			throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
+		} catch (InvocationTargetException e) {
+			throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
+		}
+
+		retUser.setEmail("");
+		return retUser;
 	}
 
 
@@ -46,7 +58,8 @@ public class DefaultRestUserService {
 		}
 	}
 
-	@DELETE
+	@POST
+	@Path("logout")
 	public void logout(@PathParam("key") final String userKey) {
 		if (!this.userService.isValidUser(userKey)) {
 			throw new WebApplicationException(Response.Status.BAD_REQUEST);
