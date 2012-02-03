@@ -8,6 +8,10 @@ package ca.screenshot.chatservice.businesslayer;
 public class CleanUserEvent {
 	private String userId;
 
+	public CleanUserEvent(String userId) {
+		this.userId = userId;
+	}
+
 	public String getUserId() {
 		return userId;
 	}

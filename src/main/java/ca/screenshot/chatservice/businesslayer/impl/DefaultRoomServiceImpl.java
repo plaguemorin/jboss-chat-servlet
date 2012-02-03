@@ -112,7 +112,7 @@ public class DefaultRoomServiceImpl implements RoomService {
 	}
 
 	private void housecleaning(@Observes final CleanUserEvent cleanUserEvent) {
-		logger.info("Performing clean of timed-out users");
+		logger.info("[A] Performing clean of timed-out user: " + cleanUserEvent.getUserId());
 
 	}
 }

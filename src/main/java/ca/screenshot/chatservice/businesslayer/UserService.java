@@ -2,6 +2,8 @@ package ca.screenshot.chatservice.businesslayer;
 
 import ca.screenshot.chatservice.commonobjects.User;
 
+import java.util.Set;
+
 /**
  * User: PLMorin
  * Date: 26/01/12
@@ -17,4 +19,6 @@ public interface UserService {
 	void changeNick(String userKey, String newNickname) throws InvalidUserException;
 
 	void removeUser(String userKey) throws InvalidUserException;
+
+	Set<String> getIdleUsers();
 }

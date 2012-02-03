@@ -13,9 +13,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Calendar;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
@@ -109,7 +107,21 @@ public class DefaultUserServiceImpl implements UserService {
 		}
 	}
 
+	@Override
+	public Set<String> getIdleUsers() {
+		final Set<String> idleUsers = new HashSet<String>();
+
+		for (final UserPrivate user : this.userMaps.values()) {
+			final long deltaTime = Calendar.getInstance().getTimeInMillis() - user.getLastActive();
+			if (deltaTime > 1800 && !idleUsers.contains(user.getId())) {
+				idleUsers.add(user.getId());
+			}
+		}
+
+		return idleUsers;
+	}
+
 	private void housecleaning(@Observes final CleanUserEvent cleanUserEvent) {
-		logger.info("Performing clean of timed-out users");
+		logger.info("[B] Performing clean of timed-out user: " + cleanUserEvent.getUserId());
 	}
 }

@@ -24,6 +24,8 @@ public class Housekeeping {
 
 	@Schedule(minute = "*/5")
 	private void timeout() {
-		usersEvent.fire(new CleanUserEvent());
+		for (final String userId : this.userService.getIdleUsers()) {
+			usersEvent.fire(new CleanUserEvent(userId));
+		}
 	}
 }
